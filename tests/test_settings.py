@@ -46,3 +46,6 @@ class TestDefaults(TestCase):
 
     def test_doc_expansion(self):
         self.assertIsNone(self.sut.DOC_EXPANSION)
+
+    def test_ignore_user_permissions(self):
+        self.assertIs(False, self.sut.IGNORE_USER_PERMISSIONS)

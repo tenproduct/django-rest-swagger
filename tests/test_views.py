@@ -1,10 +1,11 @@
-from django.test import TestCase
+from django.test import override_settings, TestCase
 from rest_framework.permissions import AllowAny
 from rest_framework.renderers import CoreJSONRenderer
 from rest_framework.request import Request
 from rest_framework.test import APIRequestFactory
 
 from rest_framework_swagger import renderers
+from rest_framework_swagger.settings import reload_settings
 from rest_framework_swagger.views import get_swagger_view
 
 from .compat.mock import patch
@@ -91,3 +92,12 @@ class TestGetSwaggerView(TestCase):
         call_args = mock.return_value.get_schema.call_args[1]
         self.assertIn('request', call_args)
         self.assertIsInstance(call_args['request'], Request)
+
+    @override_settings(SWAGGER_SETTINGS={'IGNORE_USER_PERMISSIONS': True})
+    def test_schema_generator_no_request_when_ignore_user_permissions(self):
+        with patch('rest_framework_swagger.views.SchemaGenerator') as mock:
+            request = self.factory.get('/')
+            self.sut()(request=request)
+
+        call_args = mock.return_value.get_schema.call_args[1]
+        self.assertNotIn('request', call_args)

@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.schemas import SchemaGenerator
 from rest_framework.views import APIView
 
-from . import renderers
+from . import renderers, settings
 
 
 def get_swagger_view(title=None, url=None, patterns=None, urlconf=None):
@@ -29,7 +29,11 @@ def get_swagger_view(title=None, url=None, patterns=None, urlconf=None):
                 patterns=patterns,
                 urlconf=urlconf
             )
-            schema = generator.get_schema(request=request)
+
+            if settings.swagger_settings.IGNORE_USER_PERMISSIONS:
+                schema = generator.get_schema()
+            else:
+                schema = generator.get_schema(request=request)
 
             if not schema:
                 raise exceptions.ValidationError(

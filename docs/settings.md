@@ -108,3 +108,9 @@ URL to swagger.io's online schema validator. Can be modified to point to a local
 install, or set to `None` to disable.
 
 **Default:** `https://online.swagger.io/validator/`
+
+
+### IGNORE_USER_PERMISSIONS
+Whether to ignore permissions when generating the schema. Controls whether a `request` is passed into [`SchemaGenerator`'s `get_schema` method](http://www.django-rest-framework.org/api-guide/schemas/#get_schemaself-request).
+
+**Default:** `False`
